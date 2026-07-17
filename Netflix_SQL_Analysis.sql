@@ -192,7 +192,6 @@ HAVING COUNT(DISTINCT t.title) > 1;
 SELECT t.genres, 
 COUNT(*) AS genre_count
 FROM shows_movies.titles AS t
-WHERE t.type = 'Movie'
 GROUP BY t.genres
 ORDER BY genre_count DESC
 LIMIT 3;
@@ -208,11 +207,17 @@ AND c.character = 'leading role'
 GROUP BY c.name
 ORDER BY average_imdb_score DESC;
 
+--------- Find which country has more titles
 
-
-
-
-
+SELECT 
+    production_countries, 
+    COUNT(*) AS total_titles,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS percentage_of_catalog,
+    ROUND(AVG(imdb_score), 2) AS avg_imdb_score
+FROM shows_movies.titles
+WHERE production_countries IS NOT NULL
+GROUP BY production_countries
+ORDER BY total_titles DESC; 
 
 
 
